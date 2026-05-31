@@ -8,5 +8,15 @@ supabase_org_id       = ""
 cloudflare_api_token  = ""
 digitalocean_token    = ""
 
+# Optional droplet (off by default)
 enable_droplet          = false
 digitalocean_ssh_key_id = ""
+
+# Optional tuning. All have sensible defaults; uncomment to override.
+# supabase_region                = "eu-west-2"
+# supabase_enable_signup         = true
+# supabase_jwt_expiry            = 3600
+# supabase_enable_edge_functions = true
+# cloudflare_enable_worker       = true
+# digitalocean_region            = "lon1"
+# digitalocean_size              = "s-1vcpu-1gb"
