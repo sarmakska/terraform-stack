@@ -1,8 +1,9 @@
 # Single-region SaaS example
 
 The smallest realistic deployment of `terraform-stack`: a Next.js app on
-Vercel, a Supabase database, and Cloudflare DNS plus R2 and KV. No
-long-running compute, so the monthly cost stays low.
+Vercel, a Supabase project with auth configured and a `health` edge function,
+and Cloudflare DNS plus R2, KV and an edge Worker. No long-running compute, so
+the monthly cost stays low.
 
 ## Use it
 
