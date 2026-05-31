@@ -4,10 +4,22 @@ terraform {
   }
 }
 
-variable "project_name" { type = string }
-variable "domain"       { type = string }
-variable "github_repo"  { type = string }
-variable "env_vars"     { type = map(string); default = {} }
+variable "project_name" {
+  type = string
+}
+
+variable "domain" {
+  type = string
+}
+
+variable "github_repo" {
+  type = string
+}
+
+variable "env_vars" {
+  type    = map(string)
+  default = {}
+}
 
 resource "vercel_project" "this" {
   name      = var.project_name
@@ -31,5 +43,10 @@ resource "vercel_project_domain" "this" {
   domain     = var.domain
 }
 
-output "project_id"   { value = vercel_project.this.id }
-output "project_name" { value = vercel_project.this.name }
+output "project_id" {
+  value = vercel_project.this.id
+}
+
+output "project_name" {
+  value = vercel_project.this.name
+}

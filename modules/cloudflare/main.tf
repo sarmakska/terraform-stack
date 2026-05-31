@@ -4,7 +4,9 @@ terraform {
   }
 }
 
-variable "domain" { type = string }
+variable "domain" {
+  type = string
+}
 
 data "cloudflare_zone" "this" {
   name = var.domain
@@ -13,7 +15,7 @@ data "cloudflare_zone" "this" {
 resource "cloudflare_record" "vercel" {
   zone_id = data.cloudflare_zone.this.id
   name    = "@"
-  value   = "76.76.21.21"  # Vercel anycast
+  value   = "76.76.21.21" # Vercel anycast
   type    = "A"
   proxied = false
 }
@@ -36,6 +38,14 @@ resource "cloudflare_workers_kv_namespace" "main" {
   title      = "${replace(var.domain, ".", "-")}-kv"
 }
 
-output "zone_id"      { value = data.cloudflare_zone.this.id }
-output "r2_bucket"    { value = cloudflare_r2_bucket.main.name }
-output "kv_namespace" { value = cloudflare_workers_kv_namespace.main.id }
+output "zone_id" {
+  value = data.cloudflare_zone.this.id
+}
+
+output "r2_bucket" {
+  value = cloudflare_r2_bucket.main.name
+}
+
+output "kv_namespace" {
+  value = cloudflare_workers_kv_namespace.main.id
+}
