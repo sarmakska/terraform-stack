@@ -1,12 +1,13 @@
 # terraform-stack
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License](https://img.shields.io/github/license/sarmakska/terraform-stack)](LICENSE)
+[![Top language](https://img.shields.io/github/languages/top/sarmakska/terraform-stack)](https://github.com/sarmakska/terraform-stack)
+[![Last commit](https://img.shields.io/github/last-commit/sarmakska/terraform-stack)](https://github.com/sarmakska/terraform-stack/commits/main)
 [![Terraform](https://img.shields.io/badge/Terraform-1.9+-7B42BC?logo=terraform&logoColor=white)](https://www.terraform.io)
 [![Vercel](https://img.shields.io/badge/Vercel-provider-black?logo=vercel)](https://registry.terraform.io/providers/vercel/vercel/latest)
 [![Supabase](https://img.shields.io/badge/Supabase-provider-3ECF8E?logo=supabase&logoColor=white)](https://registry.terraform.io/providers/supabase/supabase/latest)
 [![Cloudflare](https://img.shields.io/badge/Cloudflare-provider-F38020?logo=cloudflare&logoColor=white)](https://registry.terraform.io/providers/cloudflare/cloudflare/latest)
 [![DigitalOcean](https://img.shields.io/badge/DigitalOcean-provider-0080FF?logo=digitalocean&logoColor=white)](https://registry.terraform.io/providers/digitalocean/digitalocean/latest)
-[![Open Source](https://img.shields.io/badge/Open_Source-%E2%9D%A4-red)](https://github.com/sarmakska/terraform-stack)
 
 **Solo-engineer-stack as code: Vercel + Supabase + Cloudflare + DigitalOcean in one Terraform repo.**
 
@@ -71,10 +72,10 @@ API tokens are scoped: each provider gets only the permissions it needs.
 
 ## Modules
 
-- `modules/vercel` — project, env vars, custom domain, deployment hooks
-- `modules/supabase` — project, database password, JWT secret rotation
-- `modules/cloudflare` — zone, DNS, R2 bucket, Workers KV namespace
-- `modules/digitalocean` — droplet (Hetzner-equivalent if you swap providers), DO monitoring
+- `modules/vercel`: project, env vars, custom domain, deployment hooks
+- `modules/supabase`: project, database password, JWT secret rotation
+- `modules/cloudflare`: zone, DNS, R2 bucket, Workers KV namespace
+- `modules/digitalocean`: droplet (Hetzner-equivalent if you swap providers), DO monitoring
 
 Each module is independent. Use only the ones you need:
 
@@ -105,6 +106,10 @@ module "vercel" {
 - [ ] Tailscale module for secure private networking
 - [ ] Outputs for CI/CD: GitHub Actions secrets
 
+## Documentation
+
+Full documentation lives in the [project wiki](https://github.com/sarmakska/terraform-stack/wiki): deeper architecture, a per-module input/output reference, a quick-start walkthrough, troubleshooting, and the roadmap.
+
 ## License
 
 MIT.
@@ -131,6 +136,6 @@ Part of a portfolio of twelve production-shaped open-source repositories built a
 | [webhook-to-email](https://github.com/sarmakska/webhook-to-email) | Webhook receiver that forwards events to email via Resend |
 | [k8s-ops-toolkit](https://github.com/sarmakska/k8s-ops-toolkit) | Helm chart for shipping Next.js to Kubernetes with full observability stack |
 | [terraform-stack](https://github.com/sarmakska/terraform-stack) | Vercel + Supabase + Cloudflare + DigitalOcean modules in one Terraform repo |
-| [staff-portal](https://github.com/sarmakska/staff-portal) | Open-source HR / ops portal — leave, attendance, expenses, kiosk mode |
+| [staff-portal](https://github.com/sarmakska/staff-portal) | Open-source HR / ops portal for leave, attendance, expenses, and kiosk mode |
 
 Engineering essays at [sarmalinux.com/blog](https://sarmalinux.com/blog) &middot; All projects at [sarmalinux.com/open-source](https://sarmalinux.com/open-source)

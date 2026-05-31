@@ -9,4 +9,23 @@ override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
+tfplan
+*.tfplan
+
+# Secrets and local env
+.env
+.env.*
+.env*.local
+
+# OS and editor
 .DS_Store
+*.swp
+.idea/
+.vscode/
+
+# Generic build artefacts (in case tooling is added later)
+build/
+dist/
+node_modules/
+__pycache__/
+target/
