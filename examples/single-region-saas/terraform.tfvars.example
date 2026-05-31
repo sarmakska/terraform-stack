@@ -1,0 +1,9 @@
+project_name = "my-app"
+domain       = "example.com"
+github_repo  = "you/my-app"
+
+vercel_api_token      = ""
+supabase_access_token = ""
+supabase_org_id       = ""
+cloudflare_api_token  = ""
+digitalocean_token    = ""
