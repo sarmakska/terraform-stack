@@ -53,7 +53,7 @@ That is the whole loop. `terraform init` pulls the providers, `plan` shows you e
 - **`modules/vercel`** : a Next.js Vercel project linked to a GitHub repo, a custom domain, and environment variables wired from the other modules' outputs (Supabase URL and keys, R2 bucket, KV namespace).
 - **`modules/supabase`** : a Supabase project with a generated database password, auth configured through `supabase_settings` (site URL, redirect allow-list, signup policy, JWT lifetime), a deployed `health` edge function, and the real anon and service-role keys read back from the management API.
 - **`modules/cloudflare`** : the zone's apex `A` and `www` `CNAME` records pointing at Vercel, an R2 bucket, a Workers KV namespace, and an edge Worker (`worker.js`) bound to both R2 and KV and mapped to a route.
-- **`modules/digitalocean`** (optional) : an Ubuntu droplet with Docker pre-installed and monitoring on, behind a firewall that allows only SSH, HTTP and HTTPS inbound.
+- **`modules/digitalocean`** (optional) : an Ubuntu droplet with Docker pre-installed and monitoring on, behind a firewall that serves HTTPS publicly but keeps SSH closed by default. SSH opens only to the CIDR blocks you name in `ssh_allowed_cidrs`, so the droplet is never world-reachable on port 22 unless you explicitly ask for it.
 - **Root outputs** : project ids, the Supabase API URL and keys, the R2 bucket and KV namespace, the Worker name and route, the edge function slugs, and the droplet IP. Stable contracts you can feed into CI.
 - **`.github/workflows/ci.yml`** : `fmt -check`, `validate` of the root and every module, and `terraform test` on push and pull request.
 - **`.github/workflows/deploy.yml`** : a manual `plan` then `apply`, with the apply gated behind a protected GitHub environment so a human approves before anything is provisioned.
@@ -74,6 +74,8 @@ digitalocean_token    = "..."   # only needed if enable_droplet = true
 ```
 
 API tokens are scoped: each provider gets only the permissions it needs. Every other knob (region, JWT expiry, signup policy, worker on/off, droplet size) has a sensible default and is one variable away.
+
+Inputs are validated at plan time, so a typo fails fast with a clear message rather than surfacing as a provider error mid-apply: `domain` must be a bare apex domain, `github_repo` must be `owner/repo`, `supabase_jwt_expiry` must sit between 5 minutes and 7 days, and every entry in `digitalocean_ssh_allowed_cidrs` must be a valid CIDR block.
 
 ## When to use this
 

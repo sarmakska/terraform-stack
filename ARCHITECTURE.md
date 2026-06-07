@@ -60,7 +60,8 @@ Out of one `terraform apply`:
   bucket as `ASSETS` and the KV namespace as `CACHE`, with a route mapping
   `assets.<domain>/*` to it.
 - **Optional DigitalOcean droplet** with Docker pre-installed and monitoring
-  on, behind a firewall that allows only SSH, HTTP and HTTPS inbound.
+  on, behind a firewall that serves HTTPS publicly and keeps SSH closed by
+  default. SSH opens only to the CIDR blocks listed in `ssh_allowed_cidrs`.
 
 ## Dependency graph
 

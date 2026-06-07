@@ -74,7 +74,10 @@ Outputs: `zone_id`, `account_id`, `r2_bucket`, `kv_namespace`, `worker_name`,
 Provisions a single droplet for workloads that do not fit on Vercel
 (long-running jobs, non-HTTP services, anything that needs persistent disk
 state). The droplet runs Ubuntu 24.04 with Docker pre-installed and monitoring
-on, behind a firewall that allows only SSH, HTTP and HTTPS inbound.
+on. The firewall serves HTTPS publicly but keeps SSH closed by default: port 22
+is opened only to the CIDR blocks you list in `ssh_allowed_cidrs`, and when that
+list is empty no port-22 rule is emitted at all. The droplet is therefore never
+world-reachable on SSH unless you explicitly ask for it.
 
 Inputs:
 
@@ -84,6 +87,7 @@ Inputs:
 | `region` | string | `lon1` | DigitalOcean region |
 | `size` | string | `s-1vcpu-1gb` | Droplet size slug |
 | `ssh_key_id` | string | - | DO SSH key id for access |
+| `ssh_allowed_cidrs` | list(string) | `[]` | CIDR blocks allowed to reach SSH. Empty closes SSH entirely. Validated as CIDRs at plan time. |
 
 Outputs: `droplet_id`, `ipv4`.
 
@@ -127,6 +131,22 @@ module "vercel" {
 The Vercel project is created last so its env vars resolve from the Supabase and
 Cloudflare outputs. Terraform's dependency graph handles the ordering
 automatically.
+
+## Input validation
+
+The root variables are validated at plan time so a typo fails fast with a clear
+message instead of surfacing as a provider error halfway through an apply:
+
+| Variable | Rule |
+| --- | --- |
+| `domain` | Must be a bare apex domain such as `example.com`. No protocol, no `www`, no trailing slash. |
+| `github_repo` | Must be `owner/repo`, for example `sarmakska/terraform-stack`. |
+| `supabase_jwt_expiry` | Must be between 300 seconds (5 minutes) and 604800 seconds (7 days). |
+| `digitalocean_ssh_allowed_cidrs` | Every entry must be a valid CIDR block, for example `203.0.113.4/32`. |
+
+These rules are exercised by the test suite: `tests/smoke.tftest.hcl` asserts
+each one rejects bad input, and `tests/digitalocean_module.tftest.hcl` proves
+SSH is closed by default and scoped to exactly the configured CIDRs when set.
 
 ## Extending
 

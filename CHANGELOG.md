@@ -6,8 +6,26 @@ project follows semantic versioning for its tagged releases.
 
 ## [Unreleased]
 
+### Security
+
+- **SSH is closed by default on the DigitalOcean droplet.** The firewall no
+  longer opens port 22 to `0.0.0.0/0`. The SSH inbound rule is now driven by a
+  new `ssh_allowed_cidrs` variable (root: `digitalocean_ssh_allowed_cidrs`),
+  which defaults to an empty list, so no port-22 rule is emitted at all unless
+  you name the CIDR blocks allowed to reach it. HTTPS stays public. This
+  removes a world-open SSH surface from the optional compute path.
+
 ### Added
 
+- **Plan-time input validation.** `domain` must be a bare apex domain,
+  `github_repo` must be `owner/repo`, `supabase_jwt_expiry` must be between 300
+  and 604800 seconds, and every `digitalocean_ssh_allowed_cidrs` entry must be a
+  valid CIDR. Misconfiguration now fails fast at plan with a clear message.
+- **DigitalOcean module test.** New `tests/digitalocean_module.tftest.hcl`
+  proves SSH is closed by default, is scoped to exactly the configured CIDRs
+  when set, and that an invalid CIDR is rejected. The smoke test gained three
+  runs asserting the new root validations reject bad input. Suite is now 14
+  passing runs across three test files.
 - **Cloudflare edge Worker.** `modules/cloudflare` now deploys a real,
   module-bundled Worker (`worker.js`) bound to the R2 bucket as `ASSETS` and
   the Workers KV namespace as `CACHE`, with a route mapping `assets.<domain>/*`
