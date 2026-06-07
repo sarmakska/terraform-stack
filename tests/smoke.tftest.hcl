@@ -100,3 +100,30 @@ run "feature_flags_disable_optional_resources" {
     error_message = "Edge functions should not be planned when disabled"
   }
 }
+
+run "rejects_malformed_domain" {
+  command         = plan
+  expect_failures = [var.domain]
+
+  variables {
+    domain = "https://example.com/"
+  }
+}
+
+run "rejects_bad_github_repo" {
+  command         = plan
+  expect_failures = [var.github_repo]
+
+  variables {
+    github_repo = "not-a-repo"
+  }
+}
+
+run "rejects_out_of_range_jwt_expiry" {
+  command         = plan
+  expect_failures = [var.supabase_jwt_expiry]
+
+  variables {
+    supabase_jwt_expiry = 60
+  }
+}
