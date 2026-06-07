@@ -12,6 +12,10 @@ digitalocean_token    = ""
 enable_droplet          = false
 digitalocean_ssh_key_id = ""
 
+# SSH on the droplet is closed by default. List your own address ranges to
+# open it; never use 0.0.0.0/0 unless you genuinely want world-open SSH.
+# digitalocean_ssh_allowed_cidrs = ["203.0.113.4/32"]
+
 # Optional tuning. All have sensible defaults; uncomment to override.
 # supabase_region                = "eu-west-2"
 # supabase_enable_signup         = true

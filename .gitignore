@@ -1,4 +1,5 @@
 .terraform/
+.tftools/
 *.tfstate
 *.tfstate.*
 *.tfvars

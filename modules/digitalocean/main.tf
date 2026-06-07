@@ -22,6 +22,17 @@ variable "ssh_key_id" {
   type = string
 }
 
+variable "ssh_allowed_cidrs" {
+  type        = list(string)
+  description = "CIDR blocks permitted to reach SSH (port 22) on the droplet. Defaults to none, so SSH is closed until you add your own address. Set to [\"0.0.0.0/0\", \"::/0\"] only if you accept world-open SSH."
+  default     = []
+
+  validation {
+    condition     = alltrue([for c in var.ssh_allowed_cidrs : can(cidrhost(c, 0))])
+    error_message = "Every entry in ssh_allowed_cidrs must be a valid CIDR block, for example 203.0.113.4/32."
+  }
+}
+
 resource "digitalocean_droplet" "this" {
   name       = "${var.project_name}-worker"
   region     = var.region
@@ -42,11 +53,19 @@ resource "digitalocean_droplet" "this" {
 resource "digitalocean_firewall" "this" {
   name        = "${var.project_name}-firewall"
   droplet_ids = [digitalocean_droplet.this.id]
-  inbound_rule {
-    protocol         = "tcp"
-    port_range       = "22"
-    source_addresses = ["0.0.0.0/0", "::/0"]
+
+  # SSH is closed unless the operator names the addresses allowed to reach it.
+  # An empty ssh_allowed_cidrs (the default) emits no port-22 rule at all, so
+  # the droplet is not reachable on SSH from anywhere.
+  dynamic "inbound_rule" {
+    for_each = length(var.ssh_allowed_cidrs) > 0 ? [1] : []
+    content {
+      protocol         = "tcp"
+      port_range       = "22"
+      source_addresses = var.ssh_allowed_cidrs
+    }
   }
+
   inbound_rule {
     protocol         = "tcp"
     port_range       = "443"

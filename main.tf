@@ -72,10 +72,11 @@ module "vercel" {
 }
 
 module "digitalocean" {
-  count        = var.enable_droplet ? 1 : 0
-  source       = "./modules/digitalocean"
-  project_name = var.project_name
-  region       = var.digitalocean_region
-  size         = var.digitalocean_size
-  ssh_key_id   = var.digitalocean_ssh_key_id
+  count             = var.enable_droplet ? 1 : 0
+  source            = "./modules/digitalocean"
+  project_name      = var.project_name
+  region            = var.digitalocean_region
+  size              = var.digitalocean_size
+  ssh_key_id        = var.digitalocean_ssh_key_id
+  ssh_allowed_cidrs = var.digitalocean_ssh_allowed_cidrs
 }

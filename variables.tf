@@ -6,11 +6,21 @@ variable "project_name" {
 variable "domain" {
   type        = string
   description = "Apex domain (no www, no protocol)"
+
+  validation {
+    condition     = can(regex("^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$", var.domain))
+    error_message = "domain must be a bare apex domain such as example.com, with no protocol, no www and no trailing slash."
+  }
 }
 
 variable "github_repo" {
   type        = string
   description = "owner/repo format"
+
+  validation {
+    condition     = can(regex("^[A-Za-z0-9._-]+/[A-Za-z0-9._-]+$", var.github_repo))
+    error_message = "github_repo must be in owner/repo format, for example sarmakska/terraform-stack."
+  }
 }
 
 variable "vercel_api_token" {
@@ -44,6 +54,11 @@ variable "supabase_jwt_expiry" {
   type        = number
   description = "Supabase access token (JWT) lifetime in seconds"
   default     = 3600
+
+  validation {
+    condition     = var.supabase_jwt_expiry >= 300 && var.supabase_jwt_expiry <= 604800
+    error_message = "supabase_jwt_expiry must be between 300 seconds (5 minutes) and 604800 seconds (7 days)."
+  }
 }
 
 variable "supabase_enable_edge_functions" {
@@ -84,6 +99,12 @@ variable "digitalocean_ssh_key_id" {
   type        = string
   description = "DigitalOcean SSH key ID for droplet access"
   default     = ""
+}
+
+variable "digitalocean_ssh_allowed_cidrs" {
+  type        = list(string)
+  description = "CIDR blocks allowed to reach SSH on the droplet. Empty (default) closes SSH entirely; set to your office or VPN range, e.g. [\"203.0.113.4/32\"]."
+  default     = []
 }
 
 variable "enable_droplet" {
