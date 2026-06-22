@@ -40,7 +40,7 @@ jobs:
     outputs:
       plan_artifact: tfplan
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: hashicorp/setup-terraform@v4
         with:
@@ -66,7 +66,7 @@ jobs:
     # so the apply job pauses for manual approval before it runs.
     environment: production-apply
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: hashicorp/setup-terraform@v4
         with:
